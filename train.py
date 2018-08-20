@@ -2,10 +2,10 @@
 import sys
 
 #SELECT WHICH MODEL YOU WISH TO RUN:
-from cnn_lstm import CNN_LSTM   #OPTION 0
+#from cnn_lstm import CNN_LSTM   #OPTION 0
 from lstm_cnn import LSTM_CNN   #OPTION 1
-from cnn import CNN             #OPTION 2 (Model by: Danny Britz)
-from lstm import LSTM           #OPTION 3
+#from cnn import CNN             #OPTION 2 (Model by: Danny Britz)
+#from lstm import LSTM           #OPTION 3
 MODEL_TO_RUN = 0
 
 
@@ -64,11 +64,11 @@ x_text, y = batchgen.get_dataset(goodfile, badfile, 5000) #TODO: MAX LENGTH
 # Build vocabulary
 max_document_length = max([len(x.split(" ")) for x in x_text])
 if (not use_glove):
-    print "Not using GloVe"
+    print ("Not using GloVe")
     vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length)
     x = np.array(list(vocab_processor.fit_transform(x_text)))
 else:
-    print "Using GloVe"
+    print ("Using GloVe")
     embedding_dim = 50
     filename = '../glove.6B.50d.txt'
     def loadGloVe(filename):
@@ -135,6 +135,7 @@ print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
 with tf.Graph().as_default():
     session_conf = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
     sess = tf.Session(config=session_conf)
+    '''
     with sess.as_default():
         #embed()
         if (MODEL_TO_RUN == 0):
@@ -146,9 +147,11 @@ with tf.Graph().as_default():
         elif (MODEL_TO_RUN == 3):
             model = LSTM(x_train.shape[1],y_train.shape[1],len(vocab_processor.vocabulary_),embedding_dim)
         else:
-            print "PLEASE CHOOSE A VALID MODEL!\n0 = CNN_LSTM\n1 = LSTM_CNN\n2 = CNN\n3 = LSTM\n"
+            print ("PLEASE CHOOSE A VALID MODEL!\n0 = CNN_LSTM\n1 = LSTM_CNN\n2 = CNN\n3 = LSTM\n")
             exit();
-
+    '''
+    with sess.as_default():
+        model = LSTM_CNN(x_train.shape[1],y_train.shape[1],len(vocab_processor.vocabulary_),embedding_dim,filter_sizes,num_filters,l2_reg_lambda)
 
         # Define Training procedure
         global_step = tf.Variable(0, name="global_step", trainable=False)

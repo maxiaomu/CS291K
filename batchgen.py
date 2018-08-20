@@ -26,7 +26,7 @@ def separate_dataset(filename):
                 good_out.write(sentence+"\n")
 
             if (seen%10000==0):
-                print seen;
+                print(seen)
 
     good_out.close();
     bad_out.close();
